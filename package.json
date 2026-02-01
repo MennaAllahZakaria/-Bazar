@@ -4,8 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon server.js",
+    "start:prod": "NODE_ENV=production node index.js",
+    "build": "echo 'No build step required for Node.js backend.'",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   },
+
   "repository": {
     "type": "git",
     "url": "git+https://github.com/MennaAllahZakaria/-Bazar.git"
