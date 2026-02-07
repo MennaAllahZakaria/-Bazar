@@ -1,69 +1,65 @@
 const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
 
 const userSchema = new mongoose.Schema({
-    firstName: {
-      type: String,
-      required: true,
-    },
-    lastName: {
-        type: String,
-        required: true, 
-        },
-    email: {
-        type: String,
-        required: true,
-        unique: true,   
-        lowercase: true,
-        trim: true, 
-    },
-    phone: {
-        type: String,
-        required: true,
-        unique: true,   
-    },
-    whatssapNumber: {
-        type: String,
-        default: null,
-    },
-    password: {
-      type: String,
-      required: true,
-        minlength: 8,
-    },
-    passwordChangedAt: Date,
-    passwordResetCode: String,
-    passwordResetExpires: Date,
-    passwordResetVerified: Boolean,
+  firstName: { type: String, required: true, trim: true },
+  lastName: { type: String, required: true, trim: true },
 
-    role: { 
-        type: String,
-        enum: ["brand_owner", "user", "admin"],
-        default: "user",
-    },
-    profileImage: {
-        type: String,
-        default: null,
-    },
-    fcmToken: {
-        type: String,
-        default: null,
-    },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+    lowercase: true,
+    trim: true,
+  },
 
-    preferredLang: {
-        type: String,
-        enum: ["en", "ar"],
-        default: "en",
-    },
-    status: {
-        type: String,
-        default: "active",
-        enum: ["active", "inactive", "banned"],
-    },
+  phone: {
+    type: String,
+    required: true,
+    unique: true, // بعد normalization فقط
+  },
 
-    
+  whatsappNumber: String,
 
+  password: {
+    type: String,
+    required: true,
+    minlength: 8,
+    select: false,
+  },
 
-},{ timestamps: true });
+  roles: {
+    type: [String],
+    enum: ["user", "brand_owner", "admin", "super_admin"],
+    default: ["user"],
+  },
 
-const User = mongoose.model("User", userSchema);
-module.exports = User; 
+  emailVerified: {
+    type: Boolean,
+    default: false,
+  },
+
+  profileImage: String,
+
+  preferredLang: {
+    type: String,
+    enum: ["en", "ar"],
+    default: "ar",
+  },
+
+  status: {
+    type: String,
+    enum: ["active", "inactive", "banned"],
+    default: "active",
+  },
+
+  lastLoginAt: Date,
+}, { timestamps: true });
+
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) return next();
+  this.password = await bcrypt.hash(this.password, 12);
+  next();
+});
+
+module.exports = mongoose.model("User", userSchema);
