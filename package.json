@@ -10,7 +10,6 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
   },
-
   "repository": {
     "type": "git",
     "url": "git+https://github.com/MennaAllahZakaria/-Bazar.git"
@@ -24,6 +23,7 @@
   "dependencies": {
     "axios": "^1.13.4",
     "bcrypt": "^6.0.0",
+    "bcryptjs": "^3.0.3",
     "cloudinary": "^1.41.3",
     "compression": "^1.8.1",
     "cors": "^2.8.6",

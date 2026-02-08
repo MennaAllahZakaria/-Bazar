@@ -1,3 +1,4 @@
+const authRoutes = require('./authRoute');
 
 const mountRoutes = (app) => {
     app.use((req, res, next) => {
@@ -26,6 +27,7 @@ const mountRoutes = (app) => {
 // Mounting various routes
 //=============================
 
+    app.use('/auth', authRoutes);
 
 //=============================
 // 404 Handler

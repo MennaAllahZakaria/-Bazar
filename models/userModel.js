@@ -28,7 +28,7 @@ const userSchema = new mongoose.Schema({
     select: false,
   },
 
-  roles: {
+  role: {
     type: [String],
     enum: ["user", "brand_owner", "admin", "super_admin"],
     default: ["user"],
@@ -56,10 +56,6 @@ const userSchema = new mongoose.Schema({
   lastLoginAt: Date,
 }, { timestamps: true });
 
-userSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) return next();
-  this.password = await bcrypt.hash(this.password, 12);
-  next();
-});
+
 
 module.exports = mongoose.model("User", userSchema);
